@@ -7,6 +7,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COMMON_SCRIPT = REPO_ROOT / "scripts" / "macos" / "freetodo-common.sh"
+DEV_LAUNCHER = REPO_ROOT / "Start-FreeTodo-Dev.command"
 
 
 def run_zsh(
@@ -90,4 +91,23 @@ def test_free_space_check_can_be_exercised_without_large_allocations(tmp_path: P
     assert success.returncode == 0
     assert failure.returncode != 0
     assert "Not enough free disk space" in failure.stderr
+
+
+def test_dev_launcher_uses_canonical_data_and_source_servers() -> None:
+    text = DEV_LAUNCHER.read_text()
+
+    assert "freetodo_migrate_legacy_data" in text
+    assert "LIFETRACE_DATA_DIR" in text
+    assert "-m lifetrace.server" in text
+    assert "pnpm dev" in text
+    assert "freetodo_stop_stable_app" in text
+
+
+def test_dev_launcher_has_process_cleanup_and_health_checks() -> None:
+    text = DEV_LAUNCHER.read_text()
+
+    assert "trap cleanup" in text
+    assert "freetodo_wait_for_url" in text
+    assert "http://127.0.0.1:8001/health" in text
+    assert "http://127.0.0.1:3001" in text
 
