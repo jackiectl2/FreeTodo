@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 from pathlib import Path
@@ -8,6 +9,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COMMON_SCRIPT = REPO_ROOT / "scripts" / "macos" / "freetodo-common.sh"
 DEV_LAUNCHER = REPO_ROOT / "Start-FreeTodo-Dev.command"
+BUILD_INSTALLER = REPO_ROOT / "Build-and-Install-FreeTodo.command"
 
 
 def run_zsh(
@@ -110,4 +112,37 @@ def test_dev_launcher_has_process_cleanup_and_health_checks() -> None:
     assert "freetodo_wait_for_url" in text
     assert "http://127.0.0.1:8001/health" in text
     assert "http://127.0.0.1:3001" in text
+
+
+def test_package_has_arm64_only_build_script() -> None:
+    package = json.loads(
+        (REPO_ROOT / "free-todo-frontend" / "package.json").read_text()
+    )
+
+    command = package["scripts"][
+        "build:electron:web:pyinstaller:full:mac:arm64"
+    ]
+    assert "--mac --arm64" in command
+
+
+def test_build_installer_preserves_app_data() -> None:
+    text = BUILD_INSTALLER.read_text()
+
+    assert "freetodo_migrate_legacy_data" in text
+    assert "/Applications/FreeTodo.app" in text
+    assert "freetodo_require_free_space_gib" in text
+    assert "pnpm check" in text
+    assert "pnpm type-check" in text
+    for line in text.splitlines():
+        if "rm " in line:
+            assert "lifetrace-data" not in line
+
+
+def test_build_installer_has_rollback_and_exact_artifact_checks() -> None:
+    text = BUILD_INSTALLER.read_text()
+
+    assert "backup_app" in text
+    assert "rollback" in text
+    assert "FreeTodo.app" in text
+    assert "file \"$artifact/Contents/MacOS/FreeTodo\"" in text
 
