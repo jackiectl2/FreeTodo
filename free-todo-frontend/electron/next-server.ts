@@ -296,6 +296,22 @@ export async function startNextServer(): Promise<void> {
 	serverEnv.NODE_ENV = "production"; // 强制生产模式
 	// 注入后端 URL，让 Next.js 的 rewrite 和 API 调用使用正确的后端地址
 	serverEnv.NEXT_PUBLIC_API_URL = getBackendUrl();
+	// electron-builder installs production dependencies under Resources/app.
+	// Add that directory explicitly because the standalone server lives in a
+	// sibling directory and Node would not discover React/Next from there.
+	const packagedNodeModules = path.join(
+		process.resourcesPath,
+		"app",
+		"node_modules",
+	);
+	serverEnv.NODE_PATH = [
+		path.join(serverDir, "node_modules"),
+		packagedNodeModules,
+		serverEnv.NODE_PATH,
+	]
+		.filter(Boolean)
+		.join(path.delimiter);
+	logger.info(`Frontend NODE_PATH includes: ${packagedNodeModules}`);
 
 	// 使用 fork 启动 Node.js 服务器进程
 	// fork 是 spawn 的特殊情况，专门用于 Node.js 脚本，提供更好的 IPC 支持

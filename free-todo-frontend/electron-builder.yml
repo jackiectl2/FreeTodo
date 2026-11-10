@@ -17,6 +17,13 @@ extraResources:
     to: 'standalone'
     filter:
       - '**/*'
+      - '!node_modules{,/**/*}'
+  # electron-builder applies special handling to node_modules, so copy the
+  # standalone runtime tree as its own resource (including the minimal .pnpm store).
+  - from: '.next/standalone/node_modules'
+    to: 'standalone/node_modules'
+    filter:
+      - '**/*'
   # 复制静态文件（CSS, JS chunks等）- Next.js standalone 不包含这些文件，必须单独复制
   - from: '.next/static'
     to: 'standalone/.next/static'
