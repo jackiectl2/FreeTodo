@@ -159,6 +159,12 @@ if [ -d "$BUILD_DIR" ]; then
     fi
     echo "Config directory: $DIST_DIR/config"
     echo "Models directory: $DIST_DIR/models"
+
+    # The copied dist-backend directory is the only artifact consumed by the
+    # desktop packager. Remove PyInstaller's duplicate work/output trees to
+    # keep local macOS builds within a small disk-space budget.
+    rm -rf "$LIFETRACE_DIR/build" "$LIFETRACE_DIR/dist"
+    echo "Removed temporary PyInstaller build directories."
 else
     echo "Error: Build directory not found: $BUILD_DIR"
     echo "Available directories in dist:"

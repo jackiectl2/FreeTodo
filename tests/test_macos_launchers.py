@@ -123,6 +123,14 @@ def test_package_has_arm64_only_build_script() -> None:
         "build:electron:web:pyinstaller:full:mac:arm64"
     ]
     assert "--mac --arm64" in command
+    assert "--dir" in command
+
+
+def test_backend_build_removes_only_pyinstaller_temporary_trees() -> None:
+    text = (REPO_ROOT / "lifetrace" / "scripts" / "build-backend.sh").read_text()
+
+    assert 'rm -rf "$LIFETRACE_DIR/build" "$LIFETRACE_DIR/dist"' in text
+    assert 'rm -rf "$DIST_DIR"' not in text.split("Backend build complete!")[1]
 
 
 def test_build_installer_preserves_app_data() -> None:
