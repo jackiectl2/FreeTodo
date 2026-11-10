@@ -27,5 +27,6 @@ def test_packaged_server_can_resolve_electron_production_dependencies():
 
 def test_pyinstaller_collects_dynamically_registered_lifetrace_modules():
     text = PYINSTALLER_SPEC.read_text()
-    assert 'collect_submodules("lifetrace")' in text
+    assert 'lifetrace_dir.rglob("*.py")' in text
+    assert '".".join(["lifetrace", *module_parts])' in text
     assert "hiddenimports.extend(lifetrace_submodules)" in text

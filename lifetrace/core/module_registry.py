@@ -200,7 +200,7 @@ def register_modules(
             app.include_router(router)
             enabled_modules.append(module.id)
         except Exception as exc:
-            logger.error("Failed to register module %s: %s", module.id, exc)
+            logger.error(f"Failed to register module {module.id}: {exc}")
 
     return enabled_modules
 

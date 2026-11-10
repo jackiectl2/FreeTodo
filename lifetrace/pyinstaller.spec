@@ -218,10 +218,18 @@ lifetrace_parent_dir = str(lifetrace_dir.parent)
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 # FreeTodo registers routers and several feature modules through import_module().
-# PyInstaller cannot discover those string-based imports during static analysis,
-# so include the application's own submodules explicitly. Optional third-party
-# vector dependencies remain governed by include_vector and excludes below.
-lifetrace_submodules = collect_submodules("lifetrace")
+# PyInstaller cannot discover those string-based imports during static analysis.
+# Build module names from source paths instead of relying on collect_submodules:
+# the spec runs from inside the package directory, before Analysis applies pathex.
+lifetrace_submodules = []
+for source_file in lifetrace_dir.rglob("*.py"):
+    relative = source_file.relative_to(lifetrace_dir).with_suffix("")
+    module_parts = list(relative.parts)
+    if module_parts[-1] == "__init__":
+        module_parts.pop()
+    module_name = ".".join(["lifetrace", *module_parts])
+    if module_name and module_name not in lifetrace_submodules:
+        lifetrace_submodules.append(module_name)
 hiddenimports.extend(lifetrace_submodules)
 
 # Collect all submodules to ensure nothing is missed
