@@ -124,6 +124,7 @@ def test_package_has_arm64_only_build_script() -> None:
     ]
     assert "--mac --arm64" in command
     assert "--dir" in command
+    assert package["scripts"]["build:frontend:web"] == "next build --webpack"
 
 
 def test_backend_build_removes_only_pyinstaller_temporary_trees() -> None:
