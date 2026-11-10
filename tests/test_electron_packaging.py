@@ -5,6 +5,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 FRONTEND_ROOT = REPO_ROOT / "free-todo-frontend"
 NEXT_SERVER = FRONTEND_ROOT / "electron" / "next-server.ts"
 PYINSTALLER_SPEC = REPO_ROOT / "lifetrace" / "pyinstaller.spec"
+RUNTIME_PATHS = FRONTEND_ROOT / "electron" / "runtime-paths.ts"
 
 
 def test_electron_configs_copy_standalone_node_modules_explicitly():
@@ -30,3 +31,9 @@ def test_pyinstaller_collects_dynamically_registered_lifetrace_modules():
     assert 'lifetrace_dir.rglob("*.py")' in text
     assert '".".join(["lifetrace", *module_parts])' in text
     assert "hiddenimports.extend(lifetrace_submodules)" in text
+
+
+def test_packaged_macos_runtime_stays_outside_signed_app_bundle():
+    text = RUNTIME_PATHS.read_text()
+    assert 'app.isPackaged && process.platform === "darwin"' in text
+    assert 'app.getPath("userData")' in text
