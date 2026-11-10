@@ -217,6 +217,13 @@ lifetrace_parent_dir = str(lifetrace_dir.parent)
 # This ensures config.yaml and other data files are included
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
+# FreeTodo registers routers and several feature modules through import_module().
+# PyInstaller cannot discover those string-based imports during static analysis,
+# so include the application's own submodules explicitly. Optional third-party
+# vector dependencies remain governed by include_vector and excludes below.
+lifetrace_submodules = collect_submodules("lifetrace")
+hiddenimports.extend(lifetrace_submodules)
+
 # Collect all submodules to ensure nothing is missed
 rapidocr_submodules = collect_submodules("rapidocr_onnxruntime")
 hiddenimports.extend(rapidocr_submodules)

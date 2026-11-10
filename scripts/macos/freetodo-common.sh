@@ -61,13 +61,18 @@ freetodo_stop_stable_app() {
   local attempts=20
   while (( attempts > 0 )); do
     if ! pgrep -f '/Applications/FreeTodo.app/Contents/MacOS/FreeTodo' >/dev/null 2>&1; then
-      return 0
+      break
     fi
     sleep 0.25
     attempts=$((attempts - 1))
   done
 
   pkill -TERM -f '/Applications/FreeTodo.app/Contents/MacOS/FreeTodo' \
+    >/dev/null 2>&1 || true
+  # A startup failure can leave the bundled backend orphaned after Electron
+  # exits. Stop that exact executable as well so the next launch gets a clean
+  # port and cannot accidentally reuse stale state.
+  pkill -TERM -f '^/Applications/FreeTodo\.app/Contents/Resources/backend/lifetrace( |$)' \
     >/dev/null 2>&1 || true
 }
 

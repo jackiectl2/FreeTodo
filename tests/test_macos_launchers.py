@@ -155,3 +155,8 @@ def test_build_installer_has_rollback_and_exact_artifact_checks() -> None:
     assert "FreeTodo.app" in text
     assert "file \"$artifact/Contents/MacOS/FreeTodo\"" in text
 
+
+def test_stable_app_cleanup_stops_an_orphaned_bundled_backend() -> None:
+    text = COMMON_SCRIPT.read_text()
+    assert "Contents/Resources/backend/lifetrace" in text
+
