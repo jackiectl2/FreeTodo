@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from PIL import Image
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FRONTEND_ROOT = REPO_ROOT / "free-todo-frontend"
@@ -31,6 +33,20 @@ def test_electron_configs_use_freetodotest_identity_and_icon():
         assert "productName: FreeTodoTest" in text, config.name
         assert "com.jackiectl2.freetodotest" in text, config.name
         assert "public/free-todo-logos/freetodotest-icon.png" in text, config.name
+
+
+def test_macos_icon_uses_standard_transparent_safe_margin():
+    with Image.open(APP_ICON) as image:
+        rgba = image.convert("RGBA")
+        assert rgba.size == (1024, 1024)
+        alpha_bounds = rgba.getchannel("A").getbbox()
+
+    assert alpha_bounds is not None
+    left, top, right, bottom = alpha_bounds
+    assert left >= 95
+    assert top >= 95
+    assert right <= 929
+    assert bottom <= 929
 
 
 def test_packaged_server_can_resolve_electron_production_dependencies():
