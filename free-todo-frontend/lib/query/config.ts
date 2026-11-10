@@ -27,6 +27,13 @@ export function useLlmStatus() {
 			queryKey: ["llm-status"],
 			staleTime: 60 * 1000, // 1 分钟
 			retry: 1, // 只重试一次
+			// The packaged backend can answer before its LLM provider finishes
+			// initializing. Recheck only while it reports unconfigured so a startup
+			// race cannot leave a stale "configure AI" notification behind.
+			refetchInterval: (query) => {
+				const status = query.state.data as LlmStatusResponse | undefined;
+				return status?.configured ? false : 2000;
+			},
 			select: (data: unknown) => data as LlmStatusResponse,
 		},
 	});

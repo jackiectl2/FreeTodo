@@ -9,7 +9,7 @@ import "./island.css";
 
 export const metadata: Metadata = {
   title: "Dynamic Island",
-  description: "FreeTodo Dynamic Island Widget",
+  description: "FreeTodoTest Dynamic Island Widget",
 };
 
 /**

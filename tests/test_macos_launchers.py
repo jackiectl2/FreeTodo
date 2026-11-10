@@ -35,7 +35,7 @@ def test_common_script_declares_canonical_data_path() -> None:
     result = run_zsh(f'source "{COMMON_SCRIPT}"; freetodo_app_data_dir')
 
     assert result.stdout.strip().endswith(
-        "Library/Application Support/FreeTodo/lifetrace-data"
+        "Library/Application Support/FreeTodoTest/lifetrace-data"
     )
 
 
@@ -138,7 +138,7 @@ def test_build_installer_preserves_app_data() -> None:
     text = BUILD_INSTALLER.read_text()
 
     assert "freetodo_migrate_legacy_data" in text
-    assert "/Applications/FreeTodo.app" in text
+    assert "/Applications/FreeTodoTest.app" in text
     assert "freetodo_require_free_space_gib" in text
     assert "pnpm check" in text
     assert "pnpm type-check" in text
@@ -152,8 +152,10 @@ def test_build_installer_has_rollback_and_exact_artifact_checks() -> None:
 
     assert "backup_app" in text
     assert "rollback" in text
-    assert "FreeTodo.app" in text
-    assert "file \"$artifact/Contents/MacOS/FreeTodo\"" in text
+    assert "FreeTodoTest.app" in text
+    assert "file \"$artifact/Contents/MacOS/FreeTodoTest\"" in text
+    assert text.count("codesign --verify --deep --strict") >= 2
+    assert "modified its signed bundle" in text
 
 
 def test_stable_app_cleanup_stops_an_orphaned_bundled_backend() -> None:

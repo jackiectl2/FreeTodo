@@ -1,12 +1,12 @@
-# FreeTodo 本机部署与迁移说明
+# FreeTodoTest 本机部署与迁移说明
 
 最后更新：2026-11-10
 
 ## 当前推荐布局
 
 - 源码仓库：`/Users/ctl/Local_Documents/1_personal_projs/FreeTodo/`
-- 稳定应用：`/Applications/FreeTodo.app`
-- 个人数据：`~/Library/Application Support/FreeTodo/lifetrace-data/`
+- 稳定应用：`/Applications/FreeTodoTest.app`
+- 个人数据：`~/Library/Application Support/FreeTodoTest/lifetrace-data/`
 - 开发启动器：仓库根目录的 `Start-FreeTodo-Dev.command`
 - 一键更新器：仓库根目录的 `Build-and-Install-FreeTodo.command`
 
@@ -19,14 +19,14 @@
 ```text
 仓库/local-user-data/
         ↓
-~/Library/Application Support/FreeTodo/lifetrace-data/
+~/Library/Application Support/FreeTodoTest/lifetrace-data/
 ```
 
 如果新目录已有内容，脚本不会覆盖。迁移前后都不会删除旧目录。
 
 ## 日常启动与停止
 
-- 稳定版：从 `/Applications`、Launchpad 或 Dock 打开 `FreeTodo`。
+- 稳定版：从 `/Applications`、Launchpad 或 Dock 打开 `FreeTodoTest`。
 - 开发版：双击 `Start-FreeTodo-Dev.command`，保持 Terminal 开启，按 `Control+C` 停止。
 - 不要同时运行稳定版和开发版。
 - 原有的 `Start-FreeTodo.command` 只用于旧 localhost 布局，不再作为推荐日常入口。
@@ -39,7 +39,7 @@
 4. 安全复制整个个人数据目录：
 
    ```text
-   ~/Library/Application Support/FreeTodo/lifetrace-data/
+   ~/Library/Application Support/FreeTodoTest/lifetrace-data/
    ```
 
 5. 在新 Mac 的仓库根目录运行 `Build-and-Install-FreeTodo.command`。

@@ -16,7 +16,7 @@ interface RootLayoutProps {
 }
 
 export const metadata: Metadata = {
-	title: "Free Todo",
+	title: "FreeTodoTest",
 	description: "A todo app that tracks your life.",
 };
 

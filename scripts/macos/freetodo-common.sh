@@ -4,12 +4,19 @@
 # This file is sourced by other scripts, so it deliberately does not enable shell options.
 
 freetodo_app_data_dir() {
-  print -r -- "${FREETODO_APP_DATA_DIR:-$HOME/Library/Application Support/FreeTodo/lifetrace-data}"
+  print -r -- "${FREETODO_APP_DATA_DIR:-$HOME/Library/Application Support/FreeTodoTest/lifetrace-data}"
 }
 
 freetodo_migrate_legacy_data() {
   local repo_root="${FREETODO_REPO_ROOT:-${0:A:h:h:h}}"
-  local source="${FREETODO_LEGACY_DATA_DIR:-$repo_root/local-user-data}"
+  local source
+  if [[ -n "${FREETODO_LEGACY_DATA_DIR:-}" ]]; then
+    source="$FREETODO_LEGACY_DATA_DIR"
+  elif [[ -d "$HOME/Library/Application Support/FreeTodo/lifetrace-data" ]]; then
+    source="$HOME/Library/Application Support/FreeTodo/lifetrace-data"
+  else
+    source="$repo_root/local-user-data"
+  fi
   local destination="$(freetodo_app_data_dir)"
 
   if [[ ! -d "$source" ]]; then
@@ -51,28 +58,26 @@ freetodo_require_free_space_gib() {
 }
 
 freetodo_stop_stable_app() {
-  if [[ ! -d /Applications/FreeTodo.app ]]; then
-    return 0
-  fi
-
+  osascript -e 'tell application id "com.jackiectl2.freetodotest" to quit' \
+    >/dev/null 2>&1 || true
   osascript -e 'tell application id "com.freeugroup.freetodo" to quit' \
     >/dev/null 2>&1 || true
 
   local attempts=20
   while (( attempts > 0 )); do
-    if ! pgrep -f '/Applications/FreeTodo.app/Contents/MacOS/FreeTodo' >/dev/null 2>&1; then
+    if ! pgrep -f '/Applications/(FreeTodoTest|FreeTodo)\.app/Contents/MacOS/(FreeTodoTest|FreeTodo)' >/dev/null 2>&1; then
       break
     fi
     sleep 0.25
     attempts=$((attempts - 1))
   done
 
-  pkill -TERM -f '/Applications/FreeTodo.app/Contents/MacOS/FreeTodo' \
+  pkill -TERM -f '/Applications/(FreeTodoTest|FreeTodo)\.app/Contents/MacOS/(FreeTodoTest|FreeTodo)' \
     >/dev/null 2>&1 || true
   # A startup failure can leave the bundled backend orphaned after Electron
   # exits. Stop that exact executable as well so the next launch gets a clean
   # port and cannot accidentally reuse stale state.
-  pkill -TERM -f '^/Applications/FreeTodo\.app/Contents/Resources/backend/lifetrace( |$)' \
+  pkill -TERM -f '^/Applications/(FreeTodoTest|FreeTodo)\.app/Contents/Resources/backend/lifetrace( |$)' \
     >/dev/null 2>&1 || true
 }
 

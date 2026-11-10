@@ -25,10 +25,10 @@
 
 ## 当前阶段：桌面端 App
 
-- [x] 提供 Apple Silicon `FreeTodo.app` 构建与安装流程，不要求日常手动打开 localhost。
+- [x] 提供 Apple Silicon `FreeTodoTest.app` 构建与安装流程，不要求日常手动打开 localhost。
 - [x] 提供 `Start-FreeTodo-Dev.command`，用于直接运行 Personal Projects 中的源码。
 - [x] 提供 `Build-and-Install-FreeTodo.command`，修改源码后可一键测试、构建、回滚和安装。
-- [x] 将稳定版和 Dev 版个人数据统一到 `~/Library/Application Support/FreeTodo/lifetrace-data/`。
+- [x] 将稳定版和 Dev 版个人数据统一到 `~/Library/Application Support/FreeTodoTest/lifetrace-data/`。
 - [ ] 增加 Apple Developer ID 签名、notarization 和正式自动更新。
 - [ ] 增加菜单栏驻留、开机启动和更完整的崩溃恢复。
 

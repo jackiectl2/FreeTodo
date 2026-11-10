@@ -29,12 +29,12 @@ cleanup() {
   trap - INT TERM EXIT
   [[ -n "$frontend_pid" ]] && stop_tree "$frontend_pid"
   [[ -n "$backend_pid" ]] && stop_tree "$backend_pid"
-  print -r -- "FreeTodo Dev stopped."
+  print -r -- "FreeTodoTest Dev stopped."
 }
 trap cleanup INT TERM EXIT
 
 if [[ "$(uname -s)" != "Darwin" ]]; then
-  print -u2 -r -- "FreeTodo Dev launcher currently supports macOS only."
+  print -u2 -r -- "FreeTodoTest Dev launcher currently supports macOS only."
   exit 1
 fi
 
@@ -71,7 +71,7 @@ mkdir -p "$LIFETRACE_DATA_DIR/logs"
 BACKEND_LOG="$LIFETRACE_DATA_DIR/logs/dev-backend-console.log"
 FRONTEND_LOG="$LIFETRACE_DATA_DIR/logs/dev-frontend-console.log"
 
-print -r -- "Starting FreeTodo Dev from: $REPO_ROOT"
+print -r -- "Starting FreeTodoTest Dev from: $REPO_ROOT"
 print -r -- "Data directory: $LIFETRACE_DATA_DIR"
 
 cd "$REPO_ROOT"
@@ -93,7 +93,7 @@ if ! freetodo_wait_for_url "http://127.0.0.1:3001" 180 "$frontend_pid"; then
 fi
 
 open "http://127.0.0.1:3001"
-print -r -- "FreeTodo Dev is ready at http://127.0.0.1:3001"
+print -r -- "FreeTodoTest Dev is ready at http://127.0.0.1:3001"
 print -r -- "Frontend changes hot-reload. Restart this launcher after backend changes."
 print -r -- "Keep this Terminal window open; press Control+C to stop."
 
@@ -101,7 +101,7 @@ while kill -0 "$backend_pid" 2>/dev/null && kill -0 "$frontend_pid" 2>/dev/null;
   sleep 2
 done
 
-print -u2 -r -- "A FreeTodo Dev service exited unexpectedly."
+print -u2 -r -- "A FreeTodoTest Dev service exited unexpectedly."
 print -u2 -r -- "Backend log: $BACKEND_LOG"
 print -u2 -r -- "Frontend log: $FRONTEND_LOG"
 exit 1

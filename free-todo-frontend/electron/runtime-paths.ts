@@ -39,7 +39,7 @@ export function resolveRuntimeRoot(): string {
 
 	// A signed macOS app bundle must remain immutable after installation.
 	// Keep bootstrap/runtime files beside the app's user data instead of
-	// probing (and thereby modifying) /Applications/FreeTodo.app.
+	// probing (and thereby modifying) /Applications/FreeTodoTest.app.
 	if (app.isPackaged && process.platform === "darwin") {
 		const userRuntime = path.join(
 			app.getPath("userData"),

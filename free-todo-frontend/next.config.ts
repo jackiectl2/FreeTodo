@@ -57,6 +57,10 @@ const nextConfig: NextConfig = {
 		];
 	},
 	images: {
+		// A packaged macOS app is code-signed and must stay immutable. Production
+		// image optimization writes to .next/cache inside the app bundle, which
+		// invalidates that signature after the first rendered image.
+		unoptimized: process.env.NODE_ENV === "production",
 		remotePatterns: [
 			{
 				protocol: apiUrl.protocol.replace(":", "") as "http" | "https",

@@ -4,14 +4,14 @@ set -euo pipefail
 REPO_ROOT="${0:A:h}"
 FRONTEND_ROOT="$REPO_ROOT/free-todo-frontend"
 COMMON_SCRIPT="$REPO_ROOT/scripts/macos/freetodo-common.sh"
-TARGET_APP="/Applications/FreeTodo.app"
+TARGET_APP="/Applications/FreeTodoTest.app"
 ARTIFACT_ROOT="$FRONTEND_ROOT/dist-artifacts/electron/web/pyinstaller"
 
 source "$COMMON_SCRIPT"
 export FREETODO_REPO_ROOT="$REPO_ROOT"
 
-staging_app="/Applications/.FreeTodo.app.installing.$$"
-backup_app="/Applications/.FreeTodo.app.backup.$$"
+staging_app="/Applications/.FreeTodoTest.app.installing.$$"
+backup_app="/Applications/.FreeTodoTest.app.backup.$$"
 install_complete=0
 
 rollback() {
@@ -27,7 +27,7 @@ rollback() {
       rm -rf -- "$TARGET_APP"
     fi
     mv "$backup_app" "$TARGET_APP"
-    print -u2 -r -- "Installation failed; restored the previous FreeTodo.app."
+    print -u2 -r -- "Installation failed; restored the previous FreeTodoTest.app."
   fi
 
   exit "$exit_code"
@@ -60,20 +60,21 @@ cd "$FRONTEND_ROOT"
 pnpm check
 pnpm type-check
 
-print -r -- "Building Apple Silicon FreeTodo.app..."
+print -r -- "Building Apple Silicon FreeTodoTest.app..."
 pnpm build:electron:web:pyinstaller:full:mac:arm64
 
-artifact="$(find "$ARTIFACT_ROOT" -type d -path '*/FreeTodo.app' -prune -print -quit)"
-if [[ -z "$artifact" || ! -x "$artifact/Contents/MacOS/FreeTodo" ]]; then
-  print -u2 -r -- "Build completed without a usable FreeTodo.app artifact."
+artifact="$(find "$ARTIFACT_ROOT" -type d -path '*/FreeTodoTest.app' -prune -print -quit)"
+if [[ -z "$artifact" || ! -x "$artifact/Contents/MacOS/FreeTodoTest" ]]; then
+  print -u2 -r -- "Build completed without a usable FreeTodoTest.app artifact."
   exit 1
 fi
 
-architecture="$(file "$artifact/Contents/MacOS/FreeTodo")"
+architecture="$(file "$artifact/Contents/MacOS/FreeTodoTest")"
 if [[ "$architecture" != *"arm64"* ]]; then
   print -u2 -r -- "Unexpected app architecture: $architecture"
   exit 1
 fi
+codesign --verify --deep --strict "$artifact"
 
 print -r -- "Installing: $artifact"
 freetodo_stop_stable_app
@@ -94,7 +95,7 @@ if [[ "${FREETODO_NO_OPEN:-0}" != "1" ]]; then
 
   attempts=60
   while (( attempts > 0 )); do
-    if pgrep -f '/Applications/FreeTodo.app/Contents/MacOS/FreeTodo' >/dev/null 2>&1; then
+    if pgrep -f '/Applications/FreeTodoTest.app/Contents/MacOS/FreeTodoTest' >/dev/null 2>&1; then
       break
     fi
     sleep 1
@@ -105,6 +106,14 @@ if [[ "${FREETODO_NO_OPEN:-0}" != "1" ]]; then
     print -u2 -r -- "The installed app did not start; rolling back."
     exit 1
   fi
+
+  # Give the first page render time to exercise runtime caches, then verify
+  # that the signed bundle remained immutable.
+  sleep 5
+  if ! codesign --verify --deep --strict "$TARGET_APP"; then
+    print -u2 -r -- "The installed app modified its signed bundle; rolling back."
+    exit 1
+  fi
 fi
 
 install_complete=1
@@ -113,6 +122,6 @@ if [[ -d "$backup_app" ]]; then
 fi
 trap - EXIT
 
-print -r -- "FreeTodo.app installed successfully: $TARGET_APP"
+print -r -- "FreeTodoTest.app installed successfully: $TARGET_APP"
 print -r -- "User data preserved at: $(freetodo_app_data_dir)"
 

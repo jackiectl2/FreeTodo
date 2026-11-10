@@ -25,8 +25,8 @@ pnpm build:desktop:web:full:mac
 ```
 
 Output files will be in `dist-electron-app/`:
-- `FreeTodo-x.x.x-mac-arm64.dmg` - Apple Silicon Mac
-- `FreeTodo-x.x.x-mac-x64.dmg` - Intel Mac
+- `FreeTodoTest-x.x.x-mac-arm64.dmg` - Apple Silicon Mac
+- `FreeTodoTest-x.x.x-mac-x64.dmg` - Intel Mac
 
 ### Windows
 
@@ -117,7 +117,7 @@ Creates platform-specific installers using `electron-builder.yml` configuration.
 ### Application Structure
 
 ```
-FreeTodo.app/Contents/
+FreeTodoTest.app/Contents/
 ├── MacOS/
 │   └── FreeTodo              # Electron executable
 ├── Resources/
@@ -137,7 +137,7 @@ FreeTodo.app/Contents/
 
 ### User Data Directory
 
-**macOS**: `~/Library/Application Support/FreeTodo/lifetrace-data/`
+**macOS**: `~/Library/Application Support/FreeTodoTest/lifetrace-data/`
 - `config/` - User configuration files
 - `data/` - Database and screenshots
 - `logs/` - Backend application logs
@@ -153,7 +153,7 @@ Both frontend and backend use the same naming convention:
 
 ### Electron Main Process Logs
 
-**Location**: `~/Library/Logs/FreeTodo/`
+**Location**: `~/Library/Logs/FreeTodoTest/`
 
 Example: `2026-01-11-0.log`, `2026-01-11-1.log`
 
@@ -165,7 +165,7 @@ Contains:
 
 ### Backend Application Logs
 
-**Location**: `~/Library/Application Support/FreeTodo/lifetrace-data/logs/`
+**Location**: `~/Library/Application Support/FreeTodoTest/lifetrace-data/logs/`
 
 Example: `2026-01-11-0.log`, `2026-01-11-0.error.log`
 
@@ -178,8 +178,8 @@ Contains:
 
 ```bash
 # View latest Electron logs
-ls -lt ~/Library/Logs/FreeTodo/*.log | head -5
-tail -100 ~/Library/Logs/FreeTodo/$(ls -t ~/Library/Logs/FreeTodo/*.log | head -1)
+ls -lt ~/Library/Logs/FreeTodoTest/*.log | head -5
+tail -100 ~/Library/Logs/FreeTodoTest/$(ls -t ~/Library/Logs/FreeTodoTest/*.log | head -1)
 
 # View latest backend logs
 ls -lt ~/Library/Application\ Support/FreeTodo/lifetrace-data/logs/*.log | head -5
@@ -248,7 +248,7 @@ curl http://localhost:3100
 **Solutions**:
 1. Check if backend files exist:
    ```bash
-   ls -la /Applications/FreeTodo.app/Contents/Resources/backend/lifetrace
+   ls -la /Applications/FreeTodoTest.app/Contents/Resources/backend/lifetrace
    ```
 
 2. Rebuild the installer and reinstall the app.
@@ -268,7 +268,7 @@ curl http://localhost:3100
 
 2. Test server manually:
    ```bash
-   cd /Applications/FreeTodo.app/Contents/Resources/standalone
+   cd /Applications/FreeTodoTest.app/Contents/Resources/standalone
    PORT=3100 HOSTNAME=localhost NODE_ENV=production node server.js
    ```
 
@@ -294,7 +294,7 @@ curl http://localhost:3100
 **Solution**:
 Check that `.next/static` was copied to `standalone/.next/static`:
 ```bash
-ls /Applications/FreeTodo.app/Contents/Resources/standalone/.next/static
+ls /Applications/FreeTodoTest.app/Contents/Resources/standalone/.next/static
 ```
 
 ### Issue 5: macOS Security Warning
@@ -309,7 +309,7 @@ Option 1: Allow in System Settings
 
 Option 2: Remove quarantine attribute
 ```bash
-xattr -cr /Applications/FreeTodo.app
+xattr -cr /Applications/FreeTodoTest.app
 ```
 
 ### Issue 6: Build Size Too Large

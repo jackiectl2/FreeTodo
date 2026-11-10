@@ -59,7 +59,7 @@ export class TrayManager {
 			this.tray = new Tray(resizedIcon);
 
 			// Set tooltip
-			this.tray.setToolTip("Free Todo - Dynamic Island");
+			this.tray.setToolTip("FreeTodoTest - Dynamic Island");
 
 			// Build context menu
 			this.buildContextMenu();
@@ -82,11 +82,11 @@ export class TrayManager {
 			if (app.isPackaged) {
 				// Production: use packaged public folder
 				const resourcesPath = process.resourcesPath;
-				return path.join(resourcesPath, "standalone", "public", "free-todo-logos", "free_todo_icon_4.png");
+				return path.join(resourcesPath, "standalone", "public", "free-todo-logos", "freetodotest-icon.png");
 			}
 
 			// Development: use public folder icons
-			return path.join(__dirname, "..", "public", "free-todo-logos", "free_todo_icon_4.png");
+			return path.join(__dirname, "..", "public", "free-todo-logos", "freetodotest-icon.png");
 		} catch (error) {
 			logger.error(`Error getting tray icon path: ${error instanceof Error ? error.message : String(error)}`);
 			return null;
@@ -141,7 +141,7 @@ export class TrayManager {
 			},
 			{ type: "separator" },
 			{
-				label: "Quit Free Todo",
+				label: "Quit FreeTodoTest",
 				role: "quit",
 			},
 		];
@@ -196,8 +196,8 @@ export class TrayManager {
 		// Update tooltip to reflect current state
 		this.tray.setToolTip(
 			isVisible
-				? "Free Todo - Dynamic Island (Visible)"
-				: "Free Todo - Dynamic Island (Hidden)"
+				? "FreeTodoTest - Dynamic Island (Visible)"
+				: "FreeTodoTest - Dynamic Island (Hidden)"
 		);
 
 		// Future: could change icon appearance here

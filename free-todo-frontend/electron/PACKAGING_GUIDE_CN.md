@@ -25,8 +25,8 @@ pnpm build:desktop:web:full:mac
 ```
 
 打包完成后，DMG 文件将生成在 `dist-electron-app/` 目录下：
-- `FreeTodo-x.x.x-mac-arm64.dmg` - Apple Silicon Mac 版本
-- `FreeTodo-x.x.x-mac-x64.dmg` - Intel Mac 版本
+- `FreeTodoTest-x.x.x-mac-arm64.dmg` - Apple Silicon Mac 版本
+- `FreeTodoTest-x.x.x-mac-x64.dmg` - Intel Mac 版本
 
 ### Windows 打包
 
@@ -118,7 +118,7 @@ pnpm build:desktop:web:full:mac
 ### 应用结构
 
 ```
-FreeTodo.app/Contents/
+FreeTodoTest.app/Contents/
 ├── MacOS/
 │   └── FreeTodo              # Electron 可执行文件
 ├── Resources/
@@ -138,7 +138,7 @@ FreeTodo.app/Contents/
 
 ### 用户数据目录
 
-**macOS**: `~/Library/Application Support/FreeTodo/lifetrace-data/`
+**macOS**: `~/Library/Application Support/FreeTodoTest/lifetrace-data/`
 - `config/` - 用户配置文件
 - `data/` - 数据库和截图
 - `logs/` - 后端应用日志
@@ -154,7 +154,7 @@ FreeTodo.app/Contents/
 
 ### Electron 主进程日志
 
-**位置**: `~/Library/Logs/FreeTodo/`
+**位置**: `~/Library/Logs/FreeTodoTest/`
 
 示例：`2026-01-11-0.log`、`2026-01-11-1.log`
 
@@ -166,7 +166,7 @@ FreeTodo.app/Contents/
 
 ### 后端应用日志
 
-**位置**: `~/Library/Application Support/FreeTodo/lifetrace-data/logs/`
+**位置**: `~/Library/Application Support/FreeTodoTest/lifetrace-data/logs/`
 
 示例：`2026-01-11-0.log`、`2026-01-11-0.error.log`
 
@@ -179,8 +179,8 @@ FreeTodo.app/Contents/
 
 ```bash
 # 查看最新的 Electron 日志
-ls -lt ~/Library/Logs/FreeTodo/*.log | head -5
-tail -100 ~/Library/Logs/FreeTodo/$(ls -t ~/Library/Logs/FreeTodo/*.log | head -1)
+ls -lt ~/Library/Logs/FreeTodoTest/*.log | head -5
+tail -100 ~/Library/Logs/FreeTodoTest/$(ls -t ~/Library/Logs/FreeTodoTest/*.log | head -1)
 
 # 查看最新的后端日志
 ls -lt ~/Library/Application\ Support/FreeTodo/lifetrace-data/logs/*.log | head -5
@@ -249,7 +249,7 @@ curl http://localhost:3100
 **解决方案**:
 1. 检查后端文件是否存在：
    ```bash
-   ls -la /Applications/FreeTodo.app/Contents/Resources/backend/lifetrace
+   ls -la /Applications/FreeTodoTest.app/Contents/Resources/backend/lifetrace
    ```
 
 2. 重新打包并重新安装应用。
@@ -269,7 +269,7 @@ curl http://localhost:3100
 
 2. 手动测试服务器：
    ```bash
-   cd /Applications/FreeTodo.app/Contents/Resources/standalone
+   cd /Applications/FreeTodoTest.app/Contents/Resources/standalone
    PORT=3100 HOSTNAME=localhost NODE_ENV=production node server.js
    ```
 
@@ -295,7 +295,7 @@ curl http://localhost:3100
 **解决方案**:
 检查 `.next/static` 是否已复制到 `standalone/.next/static`：
 ```bash
-ls /Applications/FreeTodo.app/Contents/Resources/standalone/.next/static
+ls /Applications/FreeTodoTest.app/Contents/Resources/standalone/.next/static
 ```
 
 ### 问题 5: macOS 安全警告
@@ -310,7 +310,7 @@ ls /Applications/FreeTodo.app/Contents/Resources/standalone/.next/static
 
 方法 2: 移除隔离属性
 ```bash
-xattr -cr /Applications/FreeTodo.app
+xattr -cr /Applications/FreeTodoTest.app
 ```
 
 ### 问题 6: 构建产物过大

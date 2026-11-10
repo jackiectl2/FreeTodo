@@ -1,5 +1,5 @@
-appId: com.freeugroup.freetodo
-productName: FreeTodo
+appId: com.jackiectl2.freetodotest
+productName: FreeTodoTest
 copyright: Copyright © 2026 FreeU Group
 
 directories:
@@ -73,7 +73,7 @@ mac:
       arch:
         - x64
         - arm64
-  icon: public/logo.png
+  icon: public/free-todo-logos/freetodotest-icon.png
   category: public.app-category.productivity
   artifactName: '${productName}-${version}-mac-${arch}.${ext}'
 
@@ -92,7 +92,7 @@ linux:
     - target: AppImage
       arch:
         - x64
-  icon: public/logo.png
+  icon: public/free-todo-logos/freetodotest-icon.png
   category: Utility
   artifactName: '${productName}-${version}-linux-${arch}.${ext}'
 

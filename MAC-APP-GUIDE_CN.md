@@ -1,17 +1,17 @@
-# FreeTodo macOS 稳定版与开发版指南
+# FreeTodoTest macOS 稳定版与开发版指南
 
 最后更新：2026-11-10
 
 ## 两种运行模式
 
-### 稳定版 FreeTodo.app
+### 稳定版 FreeTodoTest.app
 
-- 日常使用时双击 `/Applications/FreeTodo.app`。
+- 日常使用时双击 `/Applications/FreeTodoTest.app`。
 - App 自动启动内置的 Next.js 前端和 Python 后端，不需要手动打开 localhost。
 - 稳定版使用构建时的源码快照；修改仓库源码后，需要重新构建和安装。
 - 个人数据不在 App 安装包中，更新或替换 App 不会覆盖个人数据。
 
-### FreeTodo Dev
+### FreeTodoTest Dev
 
 - 开发调试时双击仓库根目录的 `Start-FreeTodo-Dev.command`。
 - 后端直接运行仓库中的 Python 源码，前端运行 Next.js 开发服务器。
@@ -25,7 +25,7 @@
 稳定版和 Dev 版统一使用：
 
 ```text
-~/Library/Application Support/FreeTodo/lifetrace-data/
+~/Library/Application Support/FreeTodoTest/lifetrace-data/
 ```
 
 其中包括：
@@ -43,7 +43,7 @@
 
 第一次运行 `Build-and-Install-FreeTodo.command` 或 `Start-FreeTodo-Dev.command` 时：
 
-1. 如果目标数据目录为空，脚本把仓库中的旧 `local-user-data/` 完整复制过去。
+1. 如果目标数据目录为空，脚本优先把旧 `~/Library/Application Support/FreeTodo/lifetrace-data/` 完整复制过去；没有旧稳定版数据时，再复制仓库中的 `local-user-data/`。
 2. 如果目标目录已经包含任何数据，迁移会跳过，不覆盖已有数据库或配置。
 3. 旧 `local-user-data/` 不会被删除，可暂时作为迁移前备份。
 
@@ -64,7 +64,7 @@ Build-and-Install-FreeTodo.command
 3. 安全执行一次性数据迁移。
 4. 运行后端测试、Biome 和 TypeScript 检查。
 5. 构建 Next.js、PyInstaller 后端和 arm64 Electron App。
-6. 验证产物确实为 arm64 `FreeTodo.app`。
+6. 验证产物确实为 arm64 `FreeTodoTest.app`。
 7. 关闭旧版 App，临时备份旧 App，再安装新版。
 8. 启动失败时恢复旧 App；成功后删除临时 App 备份。
 
@@ -75,11 +75,11 @@ Build-and-Install-FreeTodo.command
 备份前先退出稳定版并停止 Dev 模式，然后复制：
 
 ```bash
-ditto "$HOME/Library/Application Support/FreeTodo/lifetrace-data" \
-  "$HOME/Desktop/FreeTodo-data-backup"
+ditto "$HOME/Library/Application Support/FreeTodoTest/lifetrace-data" \
+  "$HOME/Desktop/FreeTodoTest-data-backup"
 ```
 
-恢复时也必须先退出所有 FreeTodo 进程。建议把当前目录另存一份，再用 `ditto` 恢复备份；不要让两个 FreeTodo 实例同时写同一个 SQLite 数据库。
+恢复时也必须先退出所有 FreeTodoTest 进程。建议把当前目录另存一份，再用 `ditto` 恢复备份；不要让两个 FreeTodoTest 实例同时写同一个 SQLite 数据库。
 
 ## 当前限制
 

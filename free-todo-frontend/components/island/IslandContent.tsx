@@ -137,7 +137,7 @@ export const PopupContent: React.FC<PopupContentProps> = ({ todos, onOpenSidebar
         <div className="w-14 h-14 rounded-2xl border border-border overflow-hidden shadow-lg bg-card flex items-center justify-center">
           {/* Light mode logo */}
           <Image
-            src="/free-todo-logos/free_todo_icon_4_dark_with_grid.png"
+            src="/free-todo-logos/freetodotest-icon.png"
             alt="Free Todo Logo"
             width={36}
             height={36}
@@ -145,7 +145,7 @@ export const PopupContent: React.FC<PopupContentProps> = ({ todos, onOpenSidebar
           />
           {/* Dark mode logo */}
           <Image
-            src="/free-todo-logos/free_todo_icon_4_with_grid.png"
+            src="/free-todo-logos/freetodotest-icon.png"
             alt="Free Todo Logo"
             width={36}
             height={36}
